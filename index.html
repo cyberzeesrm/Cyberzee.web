@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberZee - Coming Soon</title>
+    <title>CyberZee</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -15,9 +15,8 @@
             font-family: 'Orbitron', sans-serif;
             background-color: #0a0a0a;
             color: #e5e7eb;
-            overflow: hidden; /* Prevent scrollbars from the canvas */
         }
-         #particles-js {
+        #particles-js {
             position: fixed;
             top: 0;
             left: 0;
@@ -26,7 +25,6 @@
             z-index: 0;
         }
         .hero-bg {
-            background-color: #0a0a0a;
             background-image:
                 radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.1) 0px, transparent 50%),
                 radial-gradient(at 97% 21%, hsla(214, 93%, 74%, 0.1) 0px, transparent 50%),
@@ -35,6 +33,7 @@
                 radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 0.1) 0px, transparent 50%),
                 radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 0.1) 0px, transparent 50%),
                 radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
         }
         #bg-canvas {
             position: fixed;
@@ -42,120 +41,689 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Place canvas behind content but in front of body bg */
+            z-index: -1; 
         }
-        .progress-bar-fill {
-            box-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6;
-            transition: width 0.1s ease-out;
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-glow {
+            box-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6, 0 0 15px #3b82f6;
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 10px #3b82f6, 0 0 20px #3b82f6, 0 0 30px #3b82f6;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .navbar-glass {
+            background: rgba(0, 0, 0, 0.12);
+            border-radius: 9999px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22), 0 1px 3px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(12px) saturate(120%);
+            -webkit-backdrop-filter: blur(12px) saturate(120%);
+            border: 1px solid rgba(255, 255, 255, 0.0);
+        }
+        .logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+        .gallery-ribbon {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            height: 160px;
+        }
+        .gallery-strip {
+            display: inline-flex;
+            animation: scroll-left 18s linear infinite;
+            gap: 0.5rem;
+        }
+        .gallery-strip.fast2 {
+            animation-duration: 16s;
+        }
+        .gallery-strip.reverse {
+            animation-direction: reverse;
+        }
+        .gallery-strip img {
+            height: 160px;
+            width: auto;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            flex-shrink: 0;
+        }
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        /* No hover pause */
+        .gallery-ribbon:hover .gallery-strip {
+            animation-play-state: running;
+        }
+        .tilt-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 320px;
+        }
+        .tilt-card:hover {
+            transform: perspective(700px) rotateX(4deg) rotateY(-4deg) translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
         }
         .text-glow {
             text-shadow: 0 0 8px rgba(59, 130, 246, 0.8);
         }
-
-        
-        /* Ensure main content is on top */
-        main {
-            position: relative;
-            z-index: 1;
+        .carousel-item {
+            display: none;
         }
-
-        
+        .carousel-item.active {
+            display: block;
+        }
+        .event-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .event-card:hover {
+            transform: translateY(-2px);
+        }
+        .event-expanded {
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+        .event-expanded.active {
+            display: block;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 0.75rem;
+        }
+        .slideshow-image {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slideshow-image.active {
+            display: block;
+        }
+        .slideshow-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 4px;
+        }
+        .slideshow-nav:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+        .slideshow-nav.prev {
+            left: 10px;
+        }
+        .slideshow-nav.next {
+            right: 10px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(17, 24, 39, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        .success-message {
+            color: #10b981;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        .bw-section {
+            position: relative;
+        }
+        .bw-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            filter: grayscale(100%);
+            z-index: -1;
+        }
+        /* social links*/
+        footer#join {
+            position: relative;
+            z-index: 20;
+        }
+        footer#join .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+        footer#join .social-link:hover {
+            background-color: rgba(59,130,246,0.06);
+        }
+        /* Make sure SVGs inside links don't block pointer events */
+        footer#join a svg {
+            pointer-events: none;
+        }
     </style>
 </head>
-<body class="hero-bg">
+<body>
     <canvas id="bg-canvas"></canvas>
     <div id="particles-js"></div>
 
-    <main class="min-h-screen flex flex-col items-center justify-center text-center p-6">
-        <div>
-            <!-- Logo/Title -->
-             <div class="flex justify-center">
-              <img src="logo.png" class="w-72 h-72 mb-4 -mt-6" alt="CyberZee Logo">
-            </div>
-          
-            <!-- Logo/Title -->
-            <h1 class="text-6xl md:text-8xl font-black tracking-tighter Orbitron text-white">
-                Cyber<span class="text-blue-500 text-glow">Zee</span>
-            </h1>
-            
-            <!-- Subtitle -->
-            <p id="status-text" class="mt-4 text-lg md:text-xl text-gray-400">
-                Initializing launch sequence...
-            </p>
-
-            <!-- Progress Bar and Percentage -->
-            <div class="mt-5 max-w-2xl w-full mx-auto">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-sm font-semibold text-blue-400">Loading...</span>
-                    <span id="percentage-text" class="text-sm font-bold text-white">0%</span>
-                </div>
-                <div class="w-full bg-gray-800/50 rounded-full h-2.5 border border-gray-700">
-                    <div id="progress-bar" class="bg-blue-600 h-full rounded-full progress-bar-fill" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <!-- Social Links for Hype -->
-            <div class="mt-16">
-                 <p class="text-gray-400">Follow us for the big reveal!</p>
-                 <div class="mt-6 flex justify-center gap-6">
-                    <a href="https://www.instagram.com/cyberzee_srm/" class="text-gray-500 hover:text-blue-500 transition-colors" aria-label="Instagram">
-    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path fill-rule="evenodd" d="M12.017 0C8.396 0 7.929.013 6.71.072 5.493.131 4.66.333 3.927.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.873.131 5.706.072 6.923.013 8.142 0 8.609 0 12.017s.013 3.875.072 5.092c.059 1.217.261 2.05.558 2.783.306.788.717 1.459 1.384 2.126s1.338 1.078 2.126 1.384c.733.297 1.566.499 2.783.558 1.217.059 1.684.072 5.092.072s3.875-.013 5.092-.072c1.217-.059 2.05-.261 2.783-.558.788-.306 1.459-.717 2.126-1.384s1.078-1.338 1.384-2.126c.297-.733.499-1.566.558-2.783.059-1.217.072-1.684.072-5.092s-.013-3.875-.072-5.092c-.059-1.217-.261-2.05-.558-2.783-.306-.788-.717-1.459-1.384-2.126S19.205.935 18.416.63C17.683.333 16.85.131 15.633.072 14.414.013 13.947 0 12.017 0zm0 2.162c3.204 0 3.584.012 4.85.07 1.17.054 1.805.249 2.227.413.56.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.249 1.805-.413 2.227-.217.56-.477.96-.896 1.382-.419.419-.819.679-1.381.896-.422.164-1.057.36-2.227.413-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.805-.249-2.227-.413-.56-.217-.96-.477-1.382-.896-.419-.419-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.054-1.17.249-1.805.413-2.227.217-.56.477-.96.896-1.382.419-.419.819-.679 1.381-.896.422-.164 1.057-.36 2.227-.413 1.266-.058 1.646-.07 4.85-.07z" clip-rule="evenodd"/>
-        <path fill-rule="evenodd" d="M12.017 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12.017 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" clip-rule="evenodd"/>
-        <circle cx="18.406" cy="5.594" r="1.44"/>
-    </svg>
-</a>
-                    <a href="https://www.linkedin.com/in/cyber-zee-52b117306/" class="text-gray-500 hover:text-blue-500 transition-colors" aria-label="LinkedIn">
-    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-    </svg>
-</a>
-                    <a href="https://github.com/cyberzeesrm" class="text-gray-500 hover:text-blue-500 transition-colors" aria-label="GitHub">
-                        <svg class="w-10 h-10 -mt-1 -ml-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12.001c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12.001C22 6.477 17.523 2 12 2z" clip-rule="evenodd" /></svg>
+    <div class="content-wrapper hero-bg">
+        <!-- Header -->
+        <header class="fixed top-0 left-0 right-0 z-50">
+            <div class="container mx-auto px-6 py-4">
+                <div class="navbar-glass rounded-full px-4 py-2 max-w-[66vw] mx-auto">
+                    <nav class="flex items-center justify-between">
+                    <a href="#home" class="flex items-center space-x-3">
+                        <img src="logo.png" alt="CyberZee Logo" class="logo">
+                        <span class="text-3xl font-bold tracking-tighter text-white">Cyber<span class="text-blue-500">Zee</span></span>
                     </a>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#home" class="nav-link text-gray-300 hover:text-white">Home</a>
+                        <a href="#about" class="nav-link text-gray-300 hover:text-white">About</a>
+                        <a href="#team" class="nav-link text-gray-300 hover:text-white">Team</a>
+                        <a href="#events" class="nav-link text-gray-300 hover:text-white">Events</a>
+                    </div>
+                    <a href="#join" class="hidden md:inline-block bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors">Join Us</a>
+                    <button id="mobile-menu-button" class="md:hidden text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </nav>
                 </div>
             </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-gray-900/80">
+                <a href="#home" class="block text-gray-300 hover:text-white px-6 py-3">Home</a>
+                <a href="#about" class="block text-gray-300 hover:text-white px-6 py-3">About</a>
+                <a href="#team" class="block text-gray-300 hover:text-white px-6 py-3">Team</a>
+                <a href="#events" class="block text-gray-300 hover:text-white px-6 py-3">Events</a>
+                <a href="#join" class="block text-gray-300 hover:text-white px-6 py-3">Join Us</a>
+            </div>
+        </header>
+
+        <main>
+            <!-- Home Page Content -->
+            <div id="home-page">
+                <!-- Hero Section -->
+                <section id="home" class="min-h-screen flex items-center pt-24 md:pt-0">
+                    <div class="container mx-auto px-6 text-center">
+                        <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
+                            Dive into the World of <br class="hidden md:block" /> <span class="text-blue-500">Cybersecurity</span>
+                        </h1>
+                        <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+                            CyberZee is the official cybersecurity club of SRM University Haryana. We are a thriving community of students passionate about ethical hacking, digital forensics, and network security.
+                        </p>
+                        <div class="mt-10 flex justify-center items-center gap-4">
+                            <a href="#about" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors btn-glow">Explore Activities</a>
+                            <a href="#events" class="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg hover:bg-gray-600 transition-colors">Past Events</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- What We Do Section -->
+                <section id="about" class="py-20">
+                    <div class="container mx-auto px-6">
+                        <div class="text-center mb-12">
+                            <h2 class="text-3xl md:text-4xl font-bold text-white">What We Do</h2>
+                            <p class="text-gray-400 mt-2">Learn with us, grow with us. We make cybersecurity accessible for everyone.</p>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="glass-card p-8 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300">
+                                <div class="bg-blue-500/10 inline-flex p-4 rounded-full mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-9-5.747h18" /></svg></div>
+                                <h3 class="text-2xl font-bold text-white mb-3">Hands-on Workshops</h3>
+                                <p class="text-gray-400">From basic network scanning to advanced penetration testing, our workshops are designed to give you practical, real-world skills.</p>
+                            </div>
+                            <div class="glass-card p-8 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300">
+                                 <div class="bg-green-500/10 inline-flex p-4 rounded-full mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg></div>
+                                <h3 class="text-2xl font-bold text-white mb-3">Capture The Flag (CTF)</h3>
+                                <p class="text-gray-400">Test your mettle in thrilling CTF competitions. Solve challenges, find flags, and climb the leaderboard to prove your skills.</p>
+                            </div>
+                            <div class="glass-card p-8 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300 md:col-span-2 lg:col-span-1">
+                                 <div class="bg-purple-500/10 inline-flex p-4 rounded-full mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                                <h3 class="text-2xl font-bold text-white mb-3">Community & Mentorship</h3>
+                                <p class="text-gray-400">Join a supportive network of peers and mentors. Share knowledge, collaborate on projects, and grow together in the field of cybersecurity.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="gallery" class="py-20 bg-blue/20">
+                    <div class="container mx-auto px-6">
+                        <div class="text-center mb-12">
+                            <h2 class="text-3xl md:text-4xl font-bold text-white">Event Gallery</h2>
+                            <p class="text-gray-400 mt-2">Moments from our workshops, CTFs, and meetups.</p>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="gallery-ribbon">
+                                <div class="gallery-strip">
+                                    <img src="pix/IMG-20240921-WA0015.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0021.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0033.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0038.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0043.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0044.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0063.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0074.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0008.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0022.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0028.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0077.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0018.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0021.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0023.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG20240920145851.jpg" alt="CyberZee Event Photo">
+                                    <!-- Duplicate images for seamless loop -->
+                                    <img src="pix/IMG-20240921-WA0015.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0021.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0033.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0038.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0043.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0044.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0063.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0074.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0008.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0022.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0028.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0077.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0018.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0021.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0023.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG20240920145851.jpg" alt="CyberZee Event Photo">
+                                </div>
+                            </div>
+                            <div class="gallery-ribbon">
+                                <div class="gallery-strip reverse fast2">
+                                    <img src="pix/IMG-20240921-WA0015.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0021.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0033.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0038.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0043.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0044.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0063.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0074.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0008.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0022.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0028.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0077.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0018.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0021.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0023.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG20240920145851.jpg" alt="CyberZee Event Photo">
+                                    <!-- Duplicate images for seamless loop -->
+                                    <img src="pix/IMG-20240921-WA0015.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0021.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0033.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0038.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0043.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0044.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0063.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240921-WA0074.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0008.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0022.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0028.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20240927-WA0077.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0018.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0021.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG-20241107-WA0023.jpg" alt="CyberZee Event Photo">
+                                    <img src="pix/IMG20240920145851.jpg" alt="CyberZee Event Photo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Events & Newsletter Page Content -->
+            <div id="events">
+                <section class="bw-section min-h-screen pt-32 pb-20 bg=black/20">
+                    <div class="container mx-auto px-6">
+                        <div class="text-center mb-12">
+                            <h2 class="text-3xl md:text-4xl font-bold text-white">Our Past Events</h2>
+                            <p class="text-gray-400 mt-2">A look back at what we've accomplished together.</p>
+                        </div>
+                        <div class="space-y-8 max-w-4xl mx-auto">
+                            <!-- Bytes of Truth Event -->
+                            <div class="glass-card rounded-xl overflow-hidden">
+                                <div class="event-card p-6 flex flex-col md:flex-row items-start gap-6" onclick="toggleEvent('bytes-of-truth')">
+                                    <div class="w-full md:w-1/4">
+                                        <p class="text-blue-400 font-semibold">November 2025</p>
+                                        <h3 class="text-xl font-bold text-white mt-1">Bytes of Truth</h3>
+                                    </div>
+                                    <div class="w-full md:w-3/4">
+                                        <p class="text-gray-400">An intensive workshop on threat intelligence and OSINT techniques for cybersecurity professionals.</p>
+                                        <p class="text-blue-400 text-sm mt-2">▼ Click to expand</p>
+                                    </div>
+                                </div>
+                                <div id="bytes-of-truth" class="event-expanded">
+                                    <!-- Slideshow -->
+                                    <div class="slideshow-container mb-6">
+                                        <img class="slideshow-image active" src="/website/public/events/Bytes of Truth/Bytes of Truth.jpg" alt="Bytes of Truth Event 1">
+
+                                        <button class="slideshow-nav prev" onclick="event.stopPropagation(); changeSlide(-1)">❮</button>
+                                        <button class="slideshow-nav next" onclick="event.stopPropagation(); changeSlide(1)">❯</button>
+                                    </div>
+                                    
+                                    <!-- Event Details -->
+                                    <div class="px-6 pb-6">
+                                        <h4 class="text-2xl font-bold text-white mb-4">About the Event</h4>
+                                        <p class="text-gray-300 mb-4">
+                                            Bytes of Truth was an immersive workshop focused on threat intelligence and Open Source Intelligence (OSINT) methodologies. Participants learned advanced techniques for gathering, analyzing, and leveraging publicly available information to identify and mitigate cyber threats.
+                                        </p>
+                                        <p class="text-gray-300 mb-6">
+                                            The session covered reconnaissance frameworks, social media intelligence, domain and infrastructure analysis, threat actor profiling, and real-world case studies demonstrating how OSINT is used in modern cybersecurity operations.
+                                        </p>
+                                        
+                                        <!-- Certificate Download Form -->
+                                        <div class="glass-card p-6 rounded-lg">
+                                            <h5 class="text-xl font-bold text-white mb-4">Download Your Certificate</h5>
+                                            <form id="certificate-form" onsubmit="downloadCertificate(event)">
+                                                <div class="mb-4">
+                                                    <label class="block text-gray-300 mb-2" for="student-name">Full Name</label>
+                                                    <input type="text" id="student-name" class="form-input" placeholder="Enter your full name" required>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label class="block text-gray-300 mb-2" for="student-email">Email Address</label>
+                                                    <input type="email" id="student-email" class="form-input" placeholder="Enter your email" required>
+                                                </div>
+                                                <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors w-full">
+                                                    Download Certificate
+                                                </button>
+                                                <div id="certificate-message" class="mt-4"></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="glass-card rounded-xl p-6 flex flex-col md:flex-row items-start gap-6">
+                                <div class="w-full md:w-1/4"><p class="text-blue-400 font-semibold">March 2024</p><h3 class="text-xl font-bold text-white mt-1">Intro to Wi-Fi Hacking</h3></div>
+                                <div class="w-full md:w-3/4"><p class="text-gray-400">A hands-on workshop where participants learned the fundamentals of wireless network security, packet sniffing, and common vulnerabilities in WPA/WPA2 protocols.</p></div>
+                            </div>
+                            <div class="glass-card rounded-xl p-6 flex flex-col md:flex-row items-start gap-6">
+                                <div class="w-full md:w-1/4"><p class="text-blue-400 font-semibold">January 2024</p><h3 class="text-xl font-bold text-white mt-1">Guest Lecture: A Career in Pentesting</h3></div>
+                                <div class="w-full md:w-3/4"><p class="text-gray-400">We hosted a senior security analyst from a leading cybersecurity firm who shared insights on building a career in ethical hacking and the skills required to succeed.</p></div>
+                            </div> -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Team Page Content -->
+            <div id="team">
+                <!-- Team Heading -->
+                <section class="py-12 text-center">
+                    <div class="container mx-auto px-6">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white">
+                            Meet the <span class="text-blue-500">Core Team</span>
+                        </h2>
+                        <p class="mt-3 text-base md:text-lg text-gray-400 max-w-3xl mx-auto">
+                            The passionate individuals dedicated to building a secure digital future, one workshop at a time.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Team Grid Section -->
+                <section class="py-20">
+                    <div class="w-full px-[16.67%]">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+                            <!-- Divyanka Kirola -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-blue-600/20 via-purple-500/20 to-pink-500/20 border border-white/10 hover:shadow-blue-500/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/10.png" alt="Divyanka Kirola">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Divyanka Kirola</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">Club Lead</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/divyanka-kirola-b70236293/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Yash Saini -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-emerald-500/20 via-teal-500/20 to-cyan-500/20 border border-white/10 hover:shadow-emerald-500/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/7.png" alt="Yash Saini">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Yash Saini</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">Club Comms</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/yash-saini-575976279/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Ankit Pathak -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-amber-500/20 via-orange-500/20 to-rose-500/20 border border-white/10 hover:shadow-amber-500/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/5.png" alt="Ankit Pathak">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Ankit Pathak</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">OPS Lead</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/ankit-pathak-38aa29292/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Vritti Garg -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-indigo-500/20 via-sky-500/20 to-fuchsia-500/20 border border-white/10 hover:shadow-indigo-500/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/8.png" alt="Vritti Garg">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Vritti Garg</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">SM Lead</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/vritti-garg-682667284/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Saksham Ashtt -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-lime-500/20 via-green-500/20 to-emerald-500/20 border border-white/10 hover:shadow-lime-500/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/9.png" alt="Saksham Ashtt">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Saksham Ashtt</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">Design Lead</p>
+                                <div class="mt-4 text-center">
+                                    <span class="text-gray-300">No LinkedIn provided</span>
+                                </div>
+                            </div>
+                            <!-- Kanishk Anand -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-pink-500/20 via-rose-500/20 to-red-500/20 border border-white/10 hover:shadow-rose-500/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/1.png" alt="Kanishk Anand">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Kanishk Anand</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">Web Lead</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/kanishk-anand-bb57711b8/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Poorva Khosla -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-sky-500/20 via-cyan-500/20 to-teal-500/20 border border-white/10 hover:shadow-sky-500/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/6.png" alt="Poorva Khosla">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Poorva Khosla</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">Content</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/poorva-khosla-92273a372/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Sonil Khurana -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-purple-500/20 via-indigo-500/20 to-blue-500/20 border border-white/10 hover:shadow-purple-500/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/4.png" alt="Sonil Khurana">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Sonil Khurana</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">Motion</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/sonil-khurana-116769341/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Kevin Dhankar -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-amber-400/20 via-yellow-500/20 to-orange-500/20 border border-white/10 hover:shadow-amber-400/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/2.png" alt="Kevin Dhankar">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Kevin Dhankar</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">Mentor</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/kevin-dhankhar-5126a2245/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Siddharth Gaur -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-teal-400/20 via-emerald-500/20 to-lime-500/20 border border-white/10 hover:shadow-teal-400/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/11.png" alt="Siddharth Gaur">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Siddharth Gaur</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">Mentor</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/siddg04/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Siddhant Bansal -->
+                            <div class="tilt-card rounded-2xl p-6 bg-gradient-to-br from-fuchsia-500/20 via-purple-500/20 to-violet-500/20 border border-white/10 hover:shadow-fuchsia-500/20 hover:shadow-xl">
+                                <img class="w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 border-4 border-white/30 object-cover" src="timg/3.png" alt="Siddhant Bansal">
+                                <h3 class="text-xl md:text-2xl font-bold text-white text-center">Siddhant Bansal</h3>
+                                <p class="text-blue-300 text-base md:text-lg text-center">Mentor</p>
+                                <div class="mt-4 text-center">
+                                    <a href="https://www.linkedin.com/in/siddhant42337/" target="_blank" class="inline-flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </section>
+            </div>
+
+            
+        </main>
+
+        <!-- Footer -->
+<!-- <footer id="join" class="bg-gray-900 border-t border-gray-800">
+
+
+            <div class="container mx-auto px-6 py-12">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-white">Ready to Join CyberZee?</h2>
+                    <p class="text-gray-400 mt-2">Become part of our community. Follow us on our social channels to get started.</p>
+                    <div class="mt-6 flex justify-center gap-6">
+                        <a href="#" class="text-gray-400 hover:text-blue-500 transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-blue-500 transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg></a>
+                        <a href="#" class="text-gray-400 hover:text-blue-500 transition-colors"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12.001c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12.001C22 6.477 17.523 2 12 2z" clip-rule="evenodd" /></svg></a>
+                    </div>
+                    <p class="mt-8 text-gray-500">© 2024 CyberZee Club - SRM University Haryana. All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer> -->
+    <!-- Footer -->
+<footer id="join" class="bg-gray-900 border-t border-gray-800">
+    <div class="container mx-auto px-6 py-12">
+        <div class="text-center">
+            <h2 class="text-3xl font-bold text-white">Stay Connected With CyberZee</h2>
+            <p class="text-gray-400 mt-2"></p>Follow us on our social channels and join our cybersecurity community.</p>
+            <div class="mt-6 flex justify-center gap-6">
+
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/cyberzee_srm" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-gray-400 hover:text-blue-500 transition-colors social-link">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5A4.25 4.25 0 0 0 20.5 16.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 3a5.25 5.25 0 1 1-5.25 5.25 5.25 5.25 0 0 1 5.25-5.25zm0 1.5A3.75 3.75 0 1 0 15.75 12 3.75 3.75 0 0 0 12 8zm4.75-.75a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>
+                </a>
+
+                <!-- Twitter/X -->
+                
+
+                <!-- GitHub -->
+                <a href="https://github.com/cyberzeesrm" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-gray-400 hover:text-blue-500 transition-colors social-link">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12.001c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12.001C22 6.477 17.523 2 12 2z"/></svg>
+                </a>
+
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/company/cyberzee/posts/?feedView=all" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="text-gray-400 hover:text-blue-500 transition-colors social-link">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14C2.2 0 0 2.2 0 5v14c0 2.8 2.2 5 5 5h14c2.8 0 5-2.2 5-5V5c0-2.8-2.2-5-5-5zM7.1 19.3H4.2V8.9h2.9v10.4zm-1.4-11.9c-.9 0-1.6-.7-1.6-1.6S4.8 4.2 5.7 4.2s1.6.7 1.6 1.6-.7 1.6-1.6 1.6zm14.6 11.9h-2.9v-5.6c0-1.3 0-3-1.8-3s-2 1.4-2 2.9v5.7H10V8.9h2.8v1.4h.1c.4-.7 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.5v6.1z"/></svg>
+                </a>
+
+            </div>
+
+            <p class="mt-8 text-gray-500">© 2025 CyberZee Club - SRM University Haryana. All Rights Reserved.</p>
         </div>
-    </main>
+    </div>
+</footer>
+    
+    </div>
 
     <script>
-        // --- Loading Animation Logic ---
-        const progressBar = document.getElementById('progress-bar');
-        const percentageText = document.getElementById('percentage-text');
-        const statusText = document.getElementById('status-text');
 
-        let currentPercentage = 0;
-        const targetPercentage = 88; // Stop at 98% for hype
-        const animationDuration = 3000; // 3 seconds
-        const intervalTime = animationDuration / targetPercentage;
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
 
-        const loadingInterval = setInterval(() => {
-            if (currentPercentage < targetPercentage) {
-                currentPercentage++;
-                progressBar.style.width = `${currentPercentage}%`;
-                percentageText.textContent = `${currentPercentage}%`;
-            } else {
-                clearInterval(loadingInterval);
-                statusText.textContent = 'Finalizing launch protocols. Almost there...';
-            }
-        }, intervalTime);
 
-        // --- Three.js Starfield Background Logic ---
-        let scene, camera, renderer, stars;
 
-        function init() {
-            // Scene setup
+        // --- Background Animations ---
+        function initThreeJS() {
+            let scene, camera, renderer, stars;
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
             camera.position.z = 1;
-            
-            // Renderer setup
             const canvas = document.getElementById('bg-canvas');
-            // The key is `alpha: true`, which makes the canvas background transparent
             renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            // Create stars
             const starVertices = [];
             for (let i = 0; i < 10000; i++) {
                 const x = (Math.random() - 0.5) * 2000;
@@ -163,132 +731,97 @@
                 const z = (Math.random() - 0.5) * 2000;
                 starVertices.push(x, y, z);
             }
-            
             const starGeometry = new THREE.BufferGeometry();
             starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-            
-            const starMaterial = new THREE.PointsMaterial({
-                color: 0xaaaaaa,
-                size: 0.7
-            });
-            
+            const starMaterial = new THREE.PointsMaterial({ color: 0xaaaaaa, size: 0.7 });
             stars = new THREE.Points(starGeometry, starMaterial);
             scene.add(stars);
 
-            // Handle window resize
+            function animate() {
+                requestAnimationFrame(animate);
+                stars.rotation.x += 0.0001;
+                stars.rotation.y += 0.0002;
+                renderer.render(scene, camera);
+            }
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
             window.addEventListener('resize', onWindowResize, false);
-            
             animate();
         }
 
-        function animate() {
-            requestAnimationFrame(animate);
-            
-            // Animate stars
-            stars.rotation.x += 0.0001;
-            stars.rotation.y += 0.0002;
-            
-            renderer.render(scene, camera);
+        initThreeJS();
+        
+        // --- Event Expansion ---
+        function toggleEvent(eventId) {
+            const eventElement = document.getElementById(eventId);
+            eventElement.classList.toggle('active');
         }
 
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        // --- Slideshow ---
+        let currentSlide = 0;
+        function changeSlide(direction) {
+            const slides = document.querySelectorAll('.slideshow-image');
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + direction + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
         }
 
-        init();
+        // Auto-advance slideshow every 5 seconds
+        setInterval(() => {
+            const expandedSection = document.getElementById('bytes-of-truth');
+            if (expandedSection && expandedSection.classList.contains('active')) {
+                changeSlide(1);
+            }
+        }, 5000);
+
+        // --- Certificate Download ---
+        function downloadCertificate(event) {
+            event.preventDefault();
+            const name = document.getElementById('student-name').value;
+            const email = document.getElementById('student-email').value.trim();
+            const messageDiv = document.getElementById('certificate-message');
+            
+            // Show loading message
+            messageDiv.innerHTML = '<p class="text-blue-400">Searching for certificate...</p>';
+            
+            // Construct certificate path (relative to index.html)
+            const certificatePath = `public/certificates/output/${email}.png`;
+            
+            // Create an image element to test if the file exists
+            const img = new Image();
+            
+            img.onload = function() {
+                // Certificate exists, trigger download
+                const link = document.createElement('a');
+                link.href = certificatePath;
+                link.download = `${name.replace(/\s+/g, '_')}_Certificate.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                messageDiv.innerHTML = '<p class="success-message">✓ Certificate downloaded successfully!</p>';
+                
+                // Clear form
+                document.getElementById('certificate-form').reset();
+            };
+            
+            img.onerror = function() {
+                messageDiv.innerHTML = '<p class="error-message">✗ Certificate not found for this email address. Please verify your email or contact the organizers.</p>';
+            };
+            
+            // Trigger the test
+            img.src = certificatePath;
+            
+            return false;
+        }
+        
         particlesJS('particles-js', {
-          "particles": {
-            "number": {
-              "value": 80,
-              "density": {
-                "enable": true,
-                "value_area": 800
-              }
-            },
-            "color": {
-              "value": "#ffffff"
-            },
-            "shape": {
-              "type": "circle",
-              "stroke": {
-                "width": 0,
-                "color": "#000000"
-              },
-              "polygon": {
-                "nb_sides": 5
-              },
-              "image": {
-                "src": "img/github.svg",
-                "width": 100,
-                "height": 100
-              }
-            },
-            "opacity": {
-              "value": 0.5,
-              "random": false,
-              "anim": {
-                "enable": false,
-                "speed": 1,
-                "opacity_min": 0.1,
-                "sync": false
-              }
-            },
-            "size": {
-              "value": 3,
-              "random": true,
-              "anim": {
-                "enable": false,
-                "speed": 40,
-                "size_min": 0.1,
-                "sync": false
-              }
-            },
-            "line_linked": {
-              "enable": true,
-              "distance": 150,
-              "color": "#ffffff",
-              "opacity": 0.4,
-              "width": 1
-            },
-            "move": {
-              "enable": true,
-              "speed": 2, // Lowered speed from 6 to 2
-              "direction": "none",
-              "random": false,
-              "straight": false,
-              "out_mode": "out",
-              "bounce": false,
-              "attract": {
-                "enable": false,
-                "rotateX": 600,
-                "rotateY": 1200
-              }
-            }
-          },
-          "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-              "onhover": {
-                "enable": false,
-                "mode": "repulse"
-              },
-              "onclick": {
-                "enable": true,
-                "mode": "repulse"
-              },
-              "resize": true
-            },
-            "modes": {
-              "repulse": {
-                "distance": 200, // Adjusted distance for better effect
-                "duration": 0.4
-              }
-            }
-          },
+          "particles": { "number": { "value": 80, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#ffffff" }, "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } }, "opacity": { "value": 0.5, "random": false, "anim": { "enable": false } }, "size": { "value": 3, "random": true, "anim": { "enable": false } }, "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 }, "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false } } },
+          "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": false, "mode": "repulse" }, "onclick": { "enable": true, "mode": "repulse" }, "resize": true }, "modes": { "repulse": { "distance": 200, "duration": 0.4 } } },
           "retina_detect": true
-        });
+        });     
     </script>
 </body>
 </html>

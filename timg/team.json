@@ -1,0 +1,70 @@
+{
+    "team": [
+        {
+        "name": "Divyanka Kirola",
+        "role": "Club Lead",
+        "photo": "10.png",
+        "linkedin": "https://www.linkedin.com/in/divyanka-kirola-b70236293/"
+        },
+        {
+        "name": "Yash Saini",
+        "role": "Club Comms",
+        "photo": "7.png",
+        "linkedin": "https://www.linkedin.com/in/yash-saini-575976279/"
+        },
+        {
+        "name": "Ankit Pathak",
+        "role": "OPS Lead",
+        "photo": "5.png",
+        "linkedin": "https://www.linkedin.com/in/ankit-pathak-38aa29292/"
+        },
+        {
+        "name": "Vritti Garg",
+        "role": "SM Lead",
+        "photo": "8.png",
+        "linkedin": "https://www.linkedin.com/in/vritti-garg-682667284/"
+        },
+        {
+        "name": "Saksham Ashtt",
+        "role": "Design Lead",
+        "photo": "9.png",
+        "linkedin": ""
+        },
+        {
+        "name": "Kanishk Anand",
+        "role": "Web Lead",
+        "photo": "1.png",
+        "linkedin": "https://www.linkedin.com/in/kanishk-anand-bb57711b8/"
+        },
+        {
+        "name": "Poorva Khosla",
+        "role": "Content",
+        "photo": "6.png",
+        "linkedin": "https://www.linkedin.com/in/poorva-khosla-92273a372/"
+        },
+        {
+        "name": "Sonil Khurana",
+        "role": "Motion",
+        "photo": "4.png",
+        "linkedin": "https://www.linkedin.com/in/sonil-khurana-116769341/"
+        },
+        {
+        "name": "Kevin Dhankar",
+        "role": "Mentor",
+        "photo": "2.png",
+        "linkedin": "https://www.linkedin.com/in/kevin-dhankhar-5126a2245/"
+        },
+        {
+        "name": "Siddharth Gaur",
+        "role": "Mentor",
+        "photo": "11.png",
+        "linkedin": "https://www.linkedin.com/in/siddg04/"
+        },
+        {
+        "name": "Siddhant Bansal",
+        "role": "Mentor",
+        "photo": "3.png",
+        "linkedin": "https://www.linkedin.com/in/siddhant42337/"
+        }
+    ]
+}
